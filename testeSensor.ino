@@ -23,7 +23,9 @@ bool btnPress = false;
 float filtroPassaBaixa (float x){
     static float y_pass[2] = {0,0}, x_pass[2] = {0,0};
     const float a = 0.65, b = 0.70;
-    float y = (a+b)* y_pass[0] - a * b * y_pass[1] + (1 - a - b + a * b) * x_pass[1];
+    const float a0 = 3.414, a1 = 0, a2 = 0.586;
+    const float b0 = 1, b1 = 2, b2 = 1;
+    float y =  (b0 * x + b1 * x_pass[0] + b2 * x_pass[1] - a2 * y_pass[1])/a0; 
     deslocaVetor(y_pass, 2, y);
     deslocaVetor(x_pass, 2, x);
     return y;
@@ -46,6 +48,8 @@ void loop() {
     medido = sonar.ping_cm();
     filtrado = filtroPassaBaixa(medido);
     Serial.println(medido);
+    Serial.print(",");
+    Serial.println(filtrado);
     time++;
   }
 }
